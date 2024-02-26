@@ -12,22 +12,17 @@ const refs = {
 
 refs.form.addEventListener('submit', event => {
   event.preventDefault();
-  createNotification().then(onFullfield).catch(onRejected);
+  createNotification().then(onFulfilled).catch(onRejected);
 });
-refs.delayInput.addEventListener('input', userSelectedDelay);
-
-function userSelectedDelay() {
-  return parseInt(refs.delayInput.value);
-}
 
 const createNotification = () => {
-  const time = userSelectedDelay();
+  const time = refs.delayInput.value;
 
-  const fullfield = refs.fulfilledInput.checked;
+  const isFulfilled = refs.fulfilledInput.checked;
 
   const promise = new Promise((resolve, reject) => {
     setTimeout(() => {
-      if (fullfield) {
+      if (isFulfilled) {
         resolve();
       } else {
         reject();
@@ -38,9 +33,9 @@ const createNotification = () => {
   return promise;
 };
 
-function onFullfield(result) {
-  iziToast.show({ 
-    message: `✅ Fulfilled promise in ${userSelectedDelay()}ms`,
+function onFulfilled(result) {
+  iziToast.show({
+    message: `✅ Fulfilled promise in ${refs.delayInput.value}ms`,
     position: 'topRight',
     timeout: 5000,
     backgroundColor: '#78e08f',
@@ -59,7 +54,7 @@ function onFullfield(result) {
 
 function onRejected(error) {
   iziToast.show({
-    message: `❌ Rejected promise in ${userSelectedDelay()}ms`,
+    message: `❌ Rejected promise in ${refs.delayInput.value}ms`,
     position: 'topRight',
     timeout: 5000,
     backgroundColor: '#ff6b6b',

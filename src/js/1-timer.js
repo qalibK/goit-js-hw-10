@@ -15,16 +15,18 @@ const refs = {
 
 refs.startBtn.disabled = true;
 let timerId = null;
+let selectedDate = null;
 
 const options = {
   enableTime: true,
   time_24hr: true,
   defaultDate: new Date(),
   minuteIncrement: 1,
-  onClose(selectedDate) {
+  onClose(selectedDates) {
+    selectedDate = selectedDates[0];
     const currentDate = new Date();
 
-    if (selectedDate[0] - currentDate > 0) {
+    if (selectedDate - currentDate > 0) {
       refs.startBtn.disabled = false;
     } else {
       refs.startBtn.disabled = true;
@@ -51,12 +53,13 @@ const options = {
 };
 
 function onTimerStart() {
-  const selectedDate = userSelectedDate();
+  if (!selectedDate) return;
 
   timerId = setInterval(() => {
     const startTime = new Date();
     const countdown = selectedDate - startTime;
     refs.startBtn.disabled = true;
+    refs.picker.disabled = true;
 
     if (countdown < 0) {
       clearInterval(timerId);
